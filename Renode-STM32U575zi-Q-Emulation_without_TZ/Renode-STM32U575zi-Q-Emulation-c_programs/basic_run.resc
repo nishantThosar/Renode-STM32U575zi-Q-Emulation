@@ -1,0 +1,34 @@
+:name: STM32U575 NUCLEO UART Test
+:description: Emulates STM32U575ZI-Q and connects USART1 to port 3456
+
+#Create New machine for emulation with name nucleo.
+mach clear
+mach create "nucleo"
+
+#Load the Platform descriptior file.
+machine LoadPlatformDescription @/home/nishant/stm32u575_renode/platform/u575zi_with_all_peripherals.repl
+
+#Load the ELF file in the machine
+sysbus LoadELF @/home/nishant/stm32u575_renode/firmware.elf 
+
+#Connect the USART 1 output to the terminal
+emulation CreateServerSocketTerminal 3456 "uart_term"
+connector Connect usart1 uart_term
+
+
+# Each instruction printed with its own echo (interprets \t and \n)
+echo "================= EMULATION CONTROL INSTRUCTIONS ================="
+echo ""
+echo "1. Open a new terminal and type:"
+echo " telnet localhost 3456"
+echo ""
+echo "2. To start the emulation, type:"
+echo " start"
+echo ""
+echo "3. To pause the emulation, type:"
+echo " pause"
+echo ""
+echo "4. To exit the machine, type:"
+echo " mach clear"
+echo ""
+echo "==================================================================="
